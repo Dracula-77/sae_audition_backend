@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-%-dgls0^nvzx44^!+1em*rzhhlsetey0m$*wsa=z7xgk5h7w9y
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["https://sae-audition-25.onrender.com"]
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
