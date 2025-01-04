@@ -3,6 +3,7 @@ from django.urls import path
 from AuditionForm import views
 
 urlpatterns = [
+    path("", views.frontpage, name='frontpage'),
     path("api/auditionform/", views.AuditionDataView.as_view(), name='Auditiondataview'),
     path("api/register/", views.RegisterUserView.as_view(), name='RegisterUserView'),
     path("api/login/", views.LoginUserView.as_view(), name='LoginUserView'),

@@ -1,5 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.shortcuts import render,HttpResponse
 from rest_framework import status
 from .models import AuditionData
 from .serializers import AuditionDataSerializer
@@ -7,6 +8,8 @@ from .serializers import LoginSerializer
 from .serializers import UserSerializer
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
+def frontpage(request):
+    return HttpResponse("This is backend")
 class AuditionDataView(APIView):
     def post(self, request):
         serializer = AuditionDataSerializer(data=request.data)

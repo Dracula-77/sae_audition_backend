@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-%-dgls0^nvzx44^!+1em*rzhhlsetey0m$*wsa=z7xgk5h7w9y
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["https://sae-audition-25.onrender.com"]
 
 
 # Application definition
@@ -119,7 +119,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
+
+# Static files settings
+STATIC_URL = '/static/'
+
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
