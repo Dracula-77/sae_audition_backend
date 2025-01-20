@@ -69,6 +69,7 @@ class SearchView(APIView):
         Namequery = request.GET.get('Namequery', '')
         Rollquery = request.GET.get('Rollquery', '')
         Domainquery = request.GET.get('Domainquery', '')
+        Genderquery = request.GET.get('Genderquery', '')
         data = AuditionData.objects.all()
 
         if Namequery:
@@ -77,6 +78,8 @@ class SearchView(APIView):
             data = data.filter(roll__icontains=Rollquery)
         elif Domainquery:
             data = data.filter(domain__icontains=Domainquery)
+        elif Genderquery:
+            data = data.filter(gender__icontains=Genderquery)
 
         # Filter works by query and type_of_work
 
