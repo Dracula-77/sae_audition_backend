@@ -62,7 +62,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates'), os.path.join(BASE_DIR, 'templates/react/dist'), os.path.join(BASE_DIR, 'templates/react')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')], # Add this line
         'APP_DIRS': True, 
         'OPTIONS': {
             'context_processors': [
@@ -122,23 +122,31 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
-# Static files (CSS, JavaScript, Images)
-STATIC_URL = '/static/'  # URL to access static files
+# Static files (CSS, JavaScript, Images) # URL to access static files
 
 # Directory where collectstatic gathers static files for deployment
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
 
-# Additional locations for Django to look for static files
+# Additional directories for static files
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),  # Includes your `static/react/`
+    os.path.join(BASE_DIR, 'static'),  # Development static files
 ]
-
+# Directory where collected static files will be stored (for production)
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
 # settings.py
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
+#for sending emails automatically
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # Use your email provider's SMTP server
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'sonu77mahata@gmail.com'  # Replace with your email
+EMAIL_HOST_PASSWORD = 'zzux wpuz gqvw djwq'    # Replace with your email password

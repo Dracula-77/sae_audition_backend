@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import AuditionData
 from django.contrib.auth.models import User
+from .models import OTP
 
 class AuditionDataSerializer(serializers.ModelSerializer):
 
@@ -34,4 +35,30 @@ class LoginSerializer(serializers.Serializer):
 
     def validate(self, data):
         # You can add custom validation logic here (e.g., validate password length)
+        return data
+class SendOtpSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+class VerifyOtpSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    otp = serializers.CharField(max_length=6)
+
+    def validate(self, data):
+        email = data.get('email')
+        otp = data.get('otp')
+
+        # Check if OTP exists for this email
+        try:
+            otp_instance = OTP.objects.get(email=email, otp=otp)
+            def is_expired(self):
+                """Check if OTP is expired (valid for 5 minutes)"""
+                return timezone.now() > self.created_at + timedelta(minutes=5)
+
+            # Check if OTP is expired
+            if otp_instance.is_expired():
+                raise serializers.ValidationError("OTP has expired.")
+        
+        except OTP.DoesNotExist:
+            raise serializers.ValidationError("Invalid OTP.")
+
         return data

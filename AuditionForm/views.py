@@ -8,8 +8,24 @@ from .serializers import LoginSerializer
 from .serializers import UserSerializer
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
-def frontpage(request):
-    return HttpResponse("This is backend")
+from django.core.mail import send_mail
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
+from .models import OTP
+from twilio.rest import Client
+from django.conf import settings
+from .serializers import SendOtpSerializer, VerifyOtpSerializer
+from django.core.mail import send_mail
+from rest_framework.response import Response
+from rest_framework import status
+import random
+from .serializers import SendOtpSerializer
+from .models import OTP
+from django.shortcuts import render
+
+def index(request):
+    return render(request, 'index.html')  
 class AuditionDataView(APIView):
     def post(self, request):
         serializer = AuditionDataSerializer(data=request.data)
@@ -86,3 +102,79 @@ class SearchView(APIView):
         
         serializer = AuditionDataSerializer(data, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+@csrf_exempt
+def send_email_to_user(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            user_email = data.get('email')  # Extract email from the request
+            
+            if not user_email:
+                return JsonResponse({'status': 'error', 'message': 'Email field is required.'})
+
+            # Send success email to the user
+            subject = "Thank you for your submission!"
+            message = "We have received your form submission. We'll get back to you soon."
+            from_email = 'sonu77mahata@gmail.com'  # Replace with your email
+            recipient_list = [user_email]
+
+            send_mail(subject, message, from_email, recipient_list)
+            
+            return JsonResponse({'status': 'success', 'message': 'Email sent successfully!'})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)})
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
+
+
+class SendOtpView(APIView):
+    def post(self, request):
+        serializer = SendOtpSerializer(data=request.data)
+        if serializer.is_valid():
+            email = serializer.validated_data['email']
+
+            # Delete any existing OTP for the given email
+            OTP.objects.filter(email=email).delete()
+
+            # Generate a new OTP
+            otp = random.randint(100000, 999999)
+
+            # Send OTP via email
+            send_mail(
+                'Your OTP for Admin Login',
+                f'Your OTP is {otp}. Please use this OTP to log in to your admin account.',
+                'sonu77mahata@gmail.com',  # Replace with your email
+                [email],
+                fail_silently=False,
+            )
+
+            # Save the new OTP to the database
+            OTP.objects.create(otp=str(otp), email=email)
+
+            return Response({"message": "OTP sent successfully!"}, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
+class VerifyOtpView(APIView):
+    def post(self, request):
+        serializer = VerifyOtpSerializer(data=request.data)
+        if serializer.is_valid():
+            email = serializer.validated_data['email']
+            otp_input = serializer.validated_data['otp']
+
+            try:
+                otp_record = OTP.objects.get(email=email)
+
+                # Check if OTP is expired
+                if otp_record.is_expired():
+                    return Response({"message": "OTP expired. Please request a new one."}, status=status.HTTP_400_BAD_REQUEST)
+
+                # Check if OTP matches
+                if otp_record.otp == otp_input:
+                    return Response({"success": True, "message": "OTP verified successfully!"}, status=status.HTTP_200_OK)
+                else:
+                    return Response({"message": "Invalid OTP."}, status=status.HTTP_400_BAD_REQUEST)
+
+            except OTP.DoesNotExist:
+                return Response({"message": "No OTP found for this email."}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
