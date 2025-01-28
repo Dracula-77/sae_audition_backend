@@ -114,7 +114,7 @@ def send_email_to_user(request):
 
             # Send success email to the user
             subject = "Welcome to SAE Audition - Let's Crush This Challenge! "
-            message = "Congrats on moving forward to the SAE Audition! This is the college's most demanding audition, where only the best rise to the top. It's your chance to showcase your skills, creativity, and passion. \n \nPrepare to face exciting challenges that will push your limits and ignite your innovative spirit. Every task is an opportunity to shine and grow—whether it's teamwork, leadership, or technical expertise. \n \nWe know you're ready. Stay focused, bring your A-game, and make the most of every moment. \n \nLet's make this audition unforgettable. Best of luck!\n \n \n \nWarm regards, \nSAE INDIA\nNIT Durgapur"
+            message = "Congrats on moving forward to the SAE Audition! This is the college's most demanding audition, where only the best rise to the top. It's your chance to showcase your skills, creativity, and passion. \n \nPrepare to face exciting challenges that will push your limits and ignite your innovative spirit. Every task is an opportunity to shine and grow—whether it's teamwork, leadership, or technical expertise. \n \nWe know you're ready. Stay focused, bring your A-game, and make the most of every moment. \n \nLet's make this audition unforgettable. Best of luck!\n \n \n \nWarm regards, \nSAEINDIA Collegiate Club\nNIT Durgapur"
             from_email = 'saeindia@nitdgp.ac.in'  # Replace with your email
             recipient_list = [user_email]
 
