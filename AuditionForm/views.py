@@ -113,9 +113,9 @@ def send_email_to_user(request):
                 return JsonResponse({'status': 'error', 'message': 'Email field is required.'})
 
             # Send success email to the user
-            subject = "Thank you for your submission!"
-            message = "We have received your form submission. We'll get back to you soon. \n - Team SAE-NITD"
-            from_email = 'sonu77mahata@gmail.com'  # Replace with your email
+            subject = "Welcome to SAE Audition - Let's Crush This Challenge! "
+            message = "Congrats on moving forward to the SAE Audition! 🎉 This is the college's most demanding audition, where only the best rise to the top. It's your chance to showcase your skills, creativity, and passion. \n \nPrepare to face exciting challenges that will push your limits and ignite your innovative spirit. Every task is an opportunity to shine and grow—whether it's teamwork, leadership, or technical expertise. \n \nWe know you're ready. Stay focused, bring your A-game, and make the most of every moment. \n \nLet's make this audition unforgettable. Best of luck! \n \n \n \nWarm regards, \n SAE- INDIA collegiate Club, NIT Durgapur"
+            from_email = 'saeindia@nitdgp.ac.in'  # Replace with your email
             recipient_list = [user_email]
 
             send_mail(subject, message, from_email, recipient_list)
