@@ -15,6 +15,6 @@ urlpatterns = [
     path('api/send-otp/', SendOtpView.as_view(), name='send_otp'),
     path('api/verify-otp/', VerifyOtpView.as_view(), name='verify_otp'),
     # re_path(r'^.*$', TemplateView.as_view(template_name='react/dist/index.html'))
-    re_path(r'^.*$', TemplateView.as_view(template_name='index.html')),
+    # re_path(r'^.*$', TemplateView.as_view(template_name='index.html')),
     # path("api/checkroll/", views.SearchView.as_view(), name='SearchView'),
 ]
