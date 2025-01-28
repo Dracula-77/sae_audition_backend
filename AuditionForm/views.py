@@ -114,7 +114,7 @@ def send_email_to_user(request):
 
             # Send success email to the user
             subject = "Thank you for your submission!"
-            message = "We have received your form submission. We'll get back to you soon."
+            message = "We have received your form submission. We'll get back to you soon. \n - Team SAE-NITD"
             from_email = 'sonu77mahata@gmail.com'  # Replace with your email
             recipient_list = [user_email]
 
