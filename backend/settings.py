@@ -26,7 +26,11 @@ SECRET_KEY = 'django-insecure-%-dgls0^nvzx44^!+1em*rzhhlsetey0m$*wsa=z7xgk5h7w9y
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    "web-production-a1bf.up.railway.app",
+    "localhost",
+    "127.0.0.1",
+]
 
 
 # Application definition
@@ -58,6 +62,9 @@ CORS_ALLOW_ALL_ORIGINS = True
 # CORS_ALLOWED_ORIGINS = [
 #     "https://sae-audition-25.onrender.com"
 # ]
+CSRF_TRUSTED_ORIGINS = [
+    "https://web-production-a1bf.up.railway.app",
+]
 ROOT_URLCONF = 'backend.urls'
 
 TEMPLATES = [
