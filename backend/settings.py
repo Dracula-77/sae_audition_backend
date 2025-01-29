@@ -39,11 +39,13 @@ INSTALLED_APPS = [
     'AuditionForm.apps.AuditionformConfig',
     'django.contrib.admin',
     'django.contrib.auth',
+    "django.contrib.sites",
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    "rest_framework_simplejwt",
     'corsheaders',
 ]
 
@@ -158,3 +160,17 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'saeindia@nitdgp.ac.in'  # Replace with your email
 EMAIL_HOST_PASSWORD = 'xwyz ocma hhxw nywg'    # Replace with your email password
+
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+}
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+}
