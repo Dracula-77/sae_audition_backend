@@ -142,7 +142,7 @@ class SendOtpView(APIView):
             send_mail(
                 'Your OTP for Admin Login',
                 f'Your OTP is {otp}. Please use this OTP to log in to your admin account.',
-                'saeindia@nitdgp.ac.in',  # Replace with your email
+                'sonu77mahata@gmail.com',  # Replace with your email
                 [email],
                 fail_silently=False,
             )
