@@ -32,6 +32,7 @@ def get_tokens_for_user(user):
         'access': str(refresh.access_token),
     } 
 class AuditionDataView(APIView):
+    permission_classes = [AllowAny]
     def post(self, request):
         serializer = AuditionDataSerializer(data=request.data)
         if serializer.is_valid():
