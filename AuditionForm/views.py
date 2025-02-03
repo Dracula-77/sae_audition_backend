@@ -20,12 +20,17 @@ from django.core.mail import send_mail
 from rest_framework.response import Response
 from rest_framework import status
 import random
-from .serializers import SendOtpSerializer
-from .models import OTP
-from django.shortcuts import render
+from django.core.mail import send_mail
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
-def index(request):
-    return render(request, 'index.html')  
+def get_tokens_for_user(user):
+    refresh = RefreshToken.for_user(user)
+    return {
+        'refresh': str(refresh),
+        'access': str(refresh.access_token),
+    } 
 class AuditionDataView(APIView):
     def post(self, request):
         serializer = AuditionDataSerializer(data=request.data)
@@ -56,52 +61,7 @@ class RegisterUserView(APIView):  # Separate view for user registration
         data = User.objects.all()
         serializer = UserSerializer(data, many=True)
         return Response(serializer.data)
-class LoginUserView(APIView):
-    def post(self, request):
-        serializer = LoginSerializer(data=request.data)
 
-        # Validate the incoming data
-        if serializer.is_valid():
-            username = serializer.validated_data['username']
-            password = serializer.validated_data['password']
-
-        user = authenticate(username=username, password=password)
-
-        if user is not None:
-            login(request, user)
-            return Response({'message': 'Login successful'}, status=status.HTTP_200_OK)
-        else:
-            return Response({'message': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
-class DeleteObjectView(APIView):
-    def delete(self, request, pk):
-        try:
-            obj = AuditionData.objects.get(pk=pk)
-            obj.delete()
-            return Response({"message": "Object deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
-        except AuditionData.DoesNotExist:
-            raise NotFound(detail="Object not found")
-class SearchView(APIView):
-    def get(self, request):
-        Namequery = request.GET.get('Namequery', '')
-        Rollquery = request.GET.get('Rollquery', '')
-        Domainquery = request.GET.get('Domainquery', '')
-        Genderquery = request.GET.get('Genderquery', '')
-        data = AuditionData.objects.all()
-
-        if Namequery:
-            data = data.filter(name__icontains=Namequery)
-        elif Rollquery:
-            data = data.filter(roll__icontains=Rollquery)
-        elif Domainquery:
-            data = data.filter(domain__icontains=Domainquery)
-        elif Genderquery:
-            data = data.filter(gender__icontains=Genderquery)
-
-        # Filter works by query and type_of_work
-
-        
-        serializer = AuditionDataSerializer(data, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
 @csrf_exempt
 def send_email_to_user(request):
     if request.method == 'POST':
@@ -178,3 +138,140 @@ class VerifyOtpView(APIView):
                 return Response({"message": "No OTP found for this email."}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class LoginUserView(APIView):
+    permission_classes = [AllowAny]  # Allow anyone to request the token
+
+    def post(self, request):
+        # Get username and password from the request data
+        serializer = LoginSerializer(data=request.data)
+        if serializer.is_valid():
+            username = serializer.validated_data['username']
+            password = serializer.validated_data['password']
+        
+        try:
+            # Attempt to authenticate the user
+            user = authenticate(username=username, password=password)
+
+            if user is not None:
+                # Create a refresh token and access token for the user
+                refresh = RefreshToken.for_user(user)
+                # access_token = str(refresh.access_token)
+                login(request, user)
+                # Return both access and refresh tokens
+                return Response({
+                'access': str(refresh.access_token),
+                'refresh': str(refresh),
+                'username': user.username,
+            }, status=status.HTTP_200_OK)
+            else:
+                return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+        except User.DoesNotExist:
+            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+    # permission_classes = [AllowAny]
+    # def post(self, request):
+    #     serializer = LoginSerializer(data=request.data)
+
+    #     # Validate the incoming data
+    #     if serializer.is_valid():
+    #         username = serializer.validated_data['username']
+    #         password = serializer.validated_data['password']
+
+    #     user = authenticate(username=username, password=password)
+
+    #     if user is not None:
+    #         refresh = RefreshToken.for_user(user)
+    #         login(request, user)
+    #         return Response({
+    #             'access': str(refresh.access_token),
+    #             'refresh': str(refresh),
+    #             'username': user.username,
+    #         }, status=status.HTTP_200_OK)
+            
+    #     else:
+    #         return Response({'message': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
+
+class CustomTokenObtainView(APIView):
+    permission_classes = [AllowAny]  # Allow anyone to request the token
+
+    def post(self, request):
+        # Get username and password from the request data
+        username = request.data.get("username")
+        password = request.data.get("password")
+        
+        try:
+            # Attempt to authenticate the user
+            user = User.objects.get(username=username)
+
+            if user.check_password(password):
+                # Create a refresh token and access token for the user
+                refresh = RefreshToken.for_user(user)
+                access_token = str(refresh.access_token)
+
+                # Return both access and refresh tokens
+                return Response({
+                    'access': access_token,
+                    'refresh': str(refresh)
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+        except User.DoesNotExist:
+            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+class ValidateTokenView(APIView):
+    permission_classes = [IsAuthenticated]  # Ensure that the request is authenticated
+
+    def get(self, request):
+        """
+        This view validates the JWT token provided in the request's Authorization header.
+        If the token is valid, it returns a success message, otherwise returns an error.
+        """
+        try:
+            # If the token is valid, the user will be authenticated
+            return Response({"message": "Token is valid"}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": "Invalid token"}, status=status.HTTP_401_UNAUTHORIZED)
+class AdminDashboardView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response({'message': 'Welcome to the Admin Dashboard'}, status=status.HTTP_200_OK)
+
+class DeleteObjectView(APIView):
+    def delete(self, request, pk):
+        try:
+            obj = AuditionData.objects.get(pk=pk)
+            obj.delete()
+            return Response({"message": "Object deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
+        except AuditionData.DoesNotExist:
+            raise NotFound(detail="Object not found")
+
+class SearchView(APIView):
+    def get(self, request):
+        Namequery = request.GET.get('Namequery', '')
+        Rollquery = request.GET.get('Rollquery', '')
+        Domainquery = request.GET.get('Domainquery', '')
+        Genderquery = request.GET.get('Genderquery', '')
+        data = AuditionData.objects.all()
+
+        if Namequery:
+            data = data.filter(name__icontains=Namequery)
+        elif Rollquery:
+            data = data.filter(roll__icontains=Rollquery)
+        elif Domainquery:
+            data = data.filter(domain__icontains=Domainquery)
+        elif Genderquery:
+            data = data.filter(gender__icontains=Genderquery)
+
+        # Filter works by query and type_of_work
+
+        
+        serializer = AuditionDataSerializer(data, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+from rest_framework.permissions import IsAuthenticated
+
+class ProtectedAdminView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response({'message': 'You are authorized!'}, status=200)
