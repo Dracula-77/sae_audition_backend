@@ -24,15 +24,16 @@ from django.core.mail import send_mail
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.decorators import api_view, permission_classes
+# def get_tokens_for_user(user):
+#     refresh = RefreshToken.for_user(user)
+#     return {
+#         'refresh': str(refresh),
+#         'access': str(refresh.access_token),
+#     } 
 
-def get_tokens_for_user(user):
-    refresh = RefreshToken.for_user(user)
-    return {
-        'refresh': str(refresh),
-        'access': str(refresh.access_token),
-    } 
 class AuditionDataView(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     def post(self, request):
         serializer = AuditionDataSerializer(data=request.data)
         if serializer.is_valid():
@@ -46,6 +47,9 @@ class AuditionDataView(APIView):
                     )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     def get(self, request):
+        if not request.user.is_authenticated:
+            raise Http404
+        
         data = AuditionData.objects.all()
         serializer = AuditionDataSerializer(data, many=True)
         return Response(serializer.data)
@@ -170,28 +174,6 @@ class LoginUserView(APIView):
                 return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
         except User.DoesNotExist:
             return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
-    # permission_classes = [AllowAny]
-    # def post(self, request):
-    #     serializer = LoginSerializer(data=request.data)
-
-    #     # Validate the incoming data
-    #     if serializer.is_valid():
-    #         username = serializer.validated_data['username']
-    #         password = serializer.validated_data['password']
-
-    #     user = authenticate(username=username, password=password)
-
-    #     if user is not None:
-    #         refresh = RefreshToken.for_user(user)
-    #         login(request, user)
-    #         return Response({
-    #             'access': str(refresh.access_token),
-    #             'refresh': str(refresh),
-    #             'username': user.username,
-    #         }, status=status.HTTP_200_OK)
-            
-    #     else:
-    #         return Response({'message': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
 
 class CustomTokenObtainView(APIView):
     permission_classes = [AllowAny]  # Allow anyone to request the token
