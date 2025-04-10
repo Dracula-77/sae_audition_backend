@@ -60,12 +60,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
-CORS_ALLOW_ALL_ORIGINS = True
-# CORS_ALLOWED_ORIGINS = [
-#     "https://sae-audition-25.onrender.com"
-# ]
+# CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    "https://web-production-4d889.up.railway.app"
+]
 CSRF_TRUSTED_ORIGINS = [
-    "https://web-production-a1bf.up.railway.app", "web-production-4d889.up.railway.app"
+    "https://web-production-a1bf.up.railway.app", "https://web-production-4d889.up.railway.app"
 ]
 ROOT_URLCONF = 'backend.urls'
 
