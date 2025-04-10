@@ -65,7 +65,7 @@ CORS_ALLOWED_ORIGINS = [
     "https://web-production-4d889.up.railway.app"
 ]
 CSRF_TRUSTED_ORIGINS = [
-    "https://web-production-a1bf.up.railway.app", "https://web-production-4d889.up.railway.app"
+    "https://web-production-4d889.up.railway.app"
 ]
 ROOT_URLCONF = 'backend.urls'
 
