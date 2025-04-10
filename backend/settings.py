@@ -30,6 +30,7 @@ ALLOWED_HOSTS = [
     "web-production-a1bf.up.railway.app",
     "localhost",
     "127.0.0.1",
+    "web-production-4d889.up.railway.app"
 ]
 
 
@@ -64,7 +65,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 #     "https://sae-audition-25.onrender.com"
 # ]
 CSRF_TRUSTED_ORIGINS = [
-    "https://web-production-a1bf.up.railway.app",
+    "https://web-production-a1bf.up.railway.app", "web-production-4d889.up.railway.app"
 ]
 ROOT_URLCONF = 'backend.urls'
 
@@ -157,8 +158,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'  # Use your email provider's SMTP server
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'saeindia@nitdgp.ac.in'  # saeindia@nitdgp.ac.in
-EMAIL_HOST_PASSWORD = 'xwyz ocma hhxw nywg'    # xwyz ocma hhxw nywg , testing :- hxrz waqo loue enql
+EMAIL_HOST_USER = 'playmygames@gamil.com'  # saeindia@nitdgp.ac.in
+EMAIL_HOST_PASSWORD = 'vfoe lgys metq urah'   
 
 
 REST_FRAMEWORK = {

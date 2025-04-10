@@ -25,6 +25,9 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework.exceptions import NotFound
+from django.http import Http404
+
 # def get_tokens_for_user(user):
 #     refresh = RefreshToken.for_user(user)
 #     return {
@@ -80,7 +83,7 @@ def send_email_to_user(request):
             # Send success email to the user
             subject = "Welcome to SAE Audition - Let's Crush This Challenge! "
             message = "Congrats on moving forward to the SAE Audition! This is the college's most demanding audition, where only the best rise to the top. It's your chance to showcase your skills, creativity, and passion. \n \nPrepare to face exciting challenges that will push your limits and ignite your innovative spirit. Every task is an opportunity to shine and grow—whether it's teamwork, leadership, or technical expertise. \n \nWe know you're ready. Stay focused, bring your A-game, and make the most of every moment. \n \nLet's make this audition unforgettable. Best of luck!\n \n \n \nWarm regards, \nSAEINDIA Collegiate Club\nNIT Durgapur"
-            from_email = 'saeindia@nitdgp.ac.in'  # saeindia@nitdgp.ac.in
+            from_email = 'playmygames77@gmail.com'  # saeindia@nitdgp.ac.in
             recipient_list = [user_email]
 
             send_mail(subject, message, from_email, recipient_list)
