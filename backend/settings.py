@@ -32,6 +32,7 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
     "web-production-4d889.up.railway.app",
     "sae-audition-backend.up.railway.app"
+    "localhost:5173"
 ]
 
 
@@ -63,10 +64,10 @@ MIDDLEWARE = [
 ]
 # CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS = [
-    "https://web-production-4d889.up.railway.app", "https://sae-audition-backend.up.railway.app"
+    "https://web-production-4d889.up.railway.app", "https://sae-audition-backend.up.railway.app", "http://localhost:5173"
 ]
 CSRF_TRUSTED_ORIGINS = [
-    "https://web-production-4d889.up.railway.app", "https://sae-audition-backend.up.railway.app"
+    "https://web-production-4d889.up.railway.app", "https://sae-audition-backend.up.railway.app", "http://localhost:5173"
 ]
 ROOT_URLCONF = 'backend.urls'
 
