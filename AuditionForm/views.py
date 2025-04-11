@@ -36,7 +36,7 @@ from django.http import Http404
 #     } 
 
 class AuditionDataView(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     def post(self, request):
         serializer = AuditionDataSerializer(data=request.data)
         if serializer.is_valid():
