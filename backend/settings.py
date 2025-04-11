@@ -30,7 +30,7 @@ ALLOWED_HOSTS = [
     "web-production-a1bf.up.railway.app",
     "localhost",
     "127.0.0.1",
-    "web-production-4d889.up.railway.app"
+    "web-production-4d889.up.railway.app",
     "sae-audition-backend.up.railway.app"
 ]
 
