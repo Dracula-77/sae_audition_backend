@@ -31,6 +31,7 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
     "sae-audition-backend.up.railway.app",
     "sae-audition25.vercel.app",
+    "sae-audition-backend.onrender.com"
 ]
 
 
@@ -62,10 +63,10 @@ MIDDLEWARE = [
 ]
 # CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS = [
-     "https://sae-audition-backend.up.railway.app", "http://localhost:5173", "https://sae-audition25.vercel.app"
+     "https://sae-audition-backend.up.railway.app", "http://localhost:5173", "https://sae-audition25.vercel.app", "sae-audition-backend.onrender.com"
 ]
 CSRF_TRUSTED_ORIGINS = [
-    "https://sae-audition-backend.up.railway.app", "http://localhost:5173", "https://sae-audition25.vercel.app"
+    "https://sae-audition-backend.up.railway.app", "http://localhost:5173", "https://sae-audition25.vercel.app","sae-audition-backend.onrender.com"
 ]
 ROOT_URLCONF = 'backend.urls'
 
