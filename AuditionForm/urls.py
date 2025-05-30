@@ -9,6 +9,7 @@ from .views import ValidateTokenView, CustomTokenObtainView
 
 urlpatterns = [
     # path("", views.frontpage, name='frontpage'),
+    path("api/test/", views.TestView.as_view(), name='Testview'),
     path("api/auditionform/", views.AuditionDataView.as_view(), name='Auditiondataview'),
     path("api/register/", views.RegisterUserView.as_view(), name='RegisterUserView'),
     path("api/login/", views.LoginUserView.as_view(), name='LoginUserView'),

@@ -34,7 +34,14 @@ from django.http import Http404
 #         'refresh': str(refresh),
 #         'access': str(refresh.access_token),
 #     } 
+class TestView(APIView):
+    permission_classes = [AllowAny]  # Allow anyone to access this view
 
+    def get(self, request):
+        return Response({"message": "This is a test view."}, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        return Response({"message": "This is a test POST request."}, status=status.HTTP_200_OK)
 class AuditionDataView(APIView):
     permission_classes = [AllowAny]
     def post(self, request):
